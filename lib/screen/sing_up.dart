@@ -119,7 +119,8 @@ class _Singup_pageState extends State<Singup_page> {
                     title: "First name",
                     data: _firstName,
                     type_text: TextInputType.name,
-                    check: false),
+                    check: false,
+                    textAction: TextInputAction.next),
                 const SizedBox(
                   height: 17,
                 ),
@@ -127,7 +128,8 @@ class _Singup_pageState extends State<Singup_page> {
                     title: "Last name",
                     data: _lastName,
                     type_text: TextInputType.name,
-                    check: false),
+                    check: false,
+                    textAction: TextInputAction.next),
                 const SizedBox(
                   height: 17,
                 ),
@@ -135,7 +137,8 @@ class _Singup_pageState extends State<Singup_page> {
                     title: "Email",
                     data: _email,
                     type_text: TextInputType.emailAddress,
-                    check: false),
+                    check: false,
+                    textAction: TextInputAction.next),
                 const SizedBox(
                   height: 17,
                 ),
@@ -143,7 +146,8 @@ class _Singup_pageState extends State<Singup_page> {
                     title: "Password",
                     data: _password,
                     type_text: TextInputType.visiblePassword,
-                    check: true),
+                    check: true,
+                    textAction: TextInputAction.done),
                 const SizedBox(
                   height: 58,
                 ),

@@ -2,52 +2,84 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 //ฟอร์มต้นแบบ
-class Input_from extends StatelessWidget {
+class Input_from extends StatefulWidget {
   final String title;
   final TextEditingController data;
   final TextInputType type_text;
   final bool check;
+  final TextInputAction textAction;
   Input_from(
       {super.key,
       required this.title,
       required this.data,
       required this.type_text,
-      required this.check});
+      required this.check,
+      required this.textAction});
+
+  @override
+  State<Input_from> createState() => _Input_fromState();
+}
+
+class _Input_fromState extends State<Input_from> {
+  bool obscureText = false;
+
+  @override
+  void initState() {
+    super.initState();
+    obscureText = widget.check;
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        width: 339,
-        height: 59,
-        decoration: BoxDecoration(
-          color: const Color.fromARGB(
-              255, 208, 208, 208), // กำหนดสีพื้นหลังด้วยรหัสสี HEX
-          borderRadius: BorderRadius.circular(15), // กำหนดขอบโค้ง
-        ),
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(0, 0, 0, 1),
-          child: Container(
-            decoration: BoxDecoration(
-              color: const Color(0xFFF3F3F3), // กำหนดสีพื้นหลังด้วยรหัสสี HEX
-              borderRadius: BorderRadius.circular(15),
-            ),
-            child: TextFormField(
-              controller: data,
-              obscureText: check,
-              style: const TextStyle(
-                fontFamily: 'Outfit',
-              ),
-              keyboardType: type_text,
-              decoration: InputDecoration(
-                hintText: title,
-                border: InputBorder.none, // เอาเส้นขอบออก
-                contentPadding: const EdgeInsets.symmetric(
-                    vertical: 15,
-                    horizontal:
-                        20), // ปรับขนาดแนวราบและตั้งค่าความสูงของช่องใส่ข้อมูล
-              ),
-            ),
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(45, 0, 45, 19),
+      child: Container(
+          height: 59,
+          decoration: BoxDecoration(
+            color: const Color.fromARGB(
+                255, 208, 208, 208), // กำหนดสีพื้นหลังด้วยรหัสสี HEX
+            borderRadius: BorderRadius.circular(15), // กำหนดขอบโค้ง
           ),
-        ));
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(0, 0, 0, 1),
+            child: Container(
+              decoration: BoxDecoration(
+                color: const Color(0xFFF3F3F3), // กำหนดสีพื้นหลังด้วยรหัสสี HEX
+                borderRadius: BorderRadius.circular(15),
+              ),
+              child: TextFormField(
+                textInputAction: widget.textAction,
+                controller: widget.data,
+                obscureText: obscureText,
+                style: const TextStyle(
+                  fontFamily: 'Outfit',
+                ),
+                keyboardType: widget.type_text,
+                decoration: InputDecoration(
+                  hintText: widget.title,
+                  border: InputBorder.none, // เอาเส้นขอบออก
+                  contentPadding:
+                      const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+                  suffixIcon: widget.check
+                      ? IconButton(
+                          icon: Icon(
+                            obscureText
+                                ? Icons.visibility_rounded
+                                : Icons.visibility_off_rounded,
+                            size: 24,
+                            color: Colors.grey,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              obscureText = !obscureText;
+                            });
+                          },
+                        )
+                      : null, // ปรับขนาดแนวราบและตั้งค่าความสูงของช่องใส่ข้อมูล
+                ),
+              ),
+            ),
+          )),
+    );
   }
 }

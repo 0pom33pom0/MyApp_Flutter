@@ -1,12 +1,15 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_gghup01/model/todo_model.dart';
 import 'package:flutter_gghup01/router/router.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MyApi {
-  String Url = 'http://192.168.26.16:6004';
+  String Url = 'http://10.0.2.2:6004';
   final header = {
     'Content-Type': 'application/json',
     'Authorization': 'Bearer 950b88051dc87fe3fcb0b4df25eee676'
@@ -56,15 +59,26 @@ class MyApi {
     await prefs.setBool('login_check', false);
   }
 
-  Future<List<dynamic>> todo_list(String userId, context) async {
-    List<dynamic> todoData = [];
+  Future<List<Todo>> todo_list(String userId, context) async {
     final response = await http.get(Uri.parse('$Url/api/todo_list/$userId'),
         headers: header);
     if (response.statusCode == 200) {
-      todoData = jsonDecode(response.body);
-      return todoData;
+      final todoData = jsonDecode(response.body) as List<dynamic>;
+      return todoData.map((item) {
+        DateTime dateTime =
+            DateTime.parse(item['user_todo_list_last_update']).toLocal();
+        String formattedDate =
+            DateFormat('hh:mm a - dd/MM/yy').format(dateTime);
+        return Todo(
+          title: item['user_todo_list_title'],
+          content: item['user_todo_list_desc'],
+          date: formattedDate,
+          id: item['user_todo_list_id'],
+          isCompleted: item['user_todo_list_completed'],
+        );
+      }).toList();
     } else {
-      throw Exception('Failed to load todo list');
+      throw Exception('Failed to fetch articles');
     }
   }
 

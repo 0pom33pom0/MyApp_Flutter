@@ -33,7 +33,7 @@ class _MyWidgetState extends State<ShowTodo> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.fromLTRB(21, 5, 21, 5),
       child: Center(
           child: Container(
         decoration: BoxDecoration(
@@ -48,26 +48,30 @@ class _MyWidgetState extends State<ShowTodo> {
           ],
         ),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
+          // mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Align(
-              alignment: Alignment.topRight,
-              child: Checkbox(
-                value: widget.isCompleted,
-                onChanged: (bool? value) {
-                  setState(() {
-                    widget.isCompleted = value ?? false;
-                  });
-                },
-                shape: const CircleBorder(),
-                checkColor: Colors.white,
-                activeColor: HexColor("#3CB189"),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(10, 23, 0, 0),
+              child: SizedBox(
+                width: 20,
+                height: 20,
+                child: Checkbox(
+                  value: widget.isCompleted,
+                  onChanged: (bool? value) {
+                    setState(() {
+                      widget.isCompleted = value ?? false;
+                    });
+                  },
+                  shape: const CircleBorder(),
+                  checkColor: Colors.white,
+                  activeColor: HexColor("#3CB189"),
+                ),
               ),
             ),
             Expanded(
                 child: Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.fromLTRB(10, 21, 0, 17),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

@@ -17,9 +17,11 @@ class Login_page extends StatefulWidget {
 }
 
 class _Login_pState extends State<Login_page> {
-  //final _navigatorKey = GlobalKey<NavigatorState>();
+  final formKey = GlobalKey<NavigatorState>();
   late final TextEditingController _email;
   late final TextEditingController _password;
+  String? _emailError;
+  String? _passwordError;
   @override
   void initState() {
     _email = TextEditingController();
@@ -43,22 +45,25 @@ class _Login_pState extends State<Login_page> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: SingleChildScrollView(
-      child: Expanded(
-        child: Container(
-          decoration: const BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage(
-                  "assets/images/backgroud_manu.png"), // รูปภาพเป็น background ด้านหลัง
-              fit: BoxFit.cover,
+        body: Container(
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage(
+              "assets/images/backgroud_manu.png"), // รูปภาพเป็น background ด้านหลัง
+          fit: BoxFit.cover,
+        ),
+      ),
+      child: LayoutBuilder(builder: (context, contraints) {
+        return SingleChildScrollView(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              minHeight: contraints.maxHeight,
             ),
-          ),
-          child: Center(
-            child: Padding(
-              padding: const EdgeInsets.all(20.0),
+            child: IntrinsicHeight(
+              key: formKey,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
+                children: [
                   const SizedBox(
                     height: 59,
                   ),
@@ -92,15 +97,14 @@ class _Login_pState extends State<Login_page> {
                       title: "Email",
                       data: _email,
                       type_text: TextInputType.emailAddress,
-                      check: false),
-                  const SizedBox(
-                      height: 19), // เพิ่มระยะห่างระหว่างช่องใส่ข้อมูล
+                      check: false,
+                      textAction: TextInputAction.next),
                   Input_from(
                       title: "Password",
                       data: _password,
                       type_text: TextInputType.visiblePassword,
-                      check: true),
-                  const SizedBox(height: 19),
+                      check: true,
+                      textAction: TextInputAction.done),
                   const Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
@@ -117,69 +121,72 @@ class _Login_pState extends State<Login_page> {
                   const SizedBox(
                     height: 43,
                   ),
-                  SizedBox(
-                    width: 339,
-                    height: 70,
-                    child: GradientElevatedButton(
-                      onPressed: () {
-                        login(_email.text.toString(), _password.text.toString(),
-                            context);
-                      },
-                      style: GradientElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(
-                              15), // ปรับความโค้งของเหลียม
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 43),
+                    child: SizedBox(
+                      width: double.infinity,
+                      height: 70,
+                      child: GradientElevatedButton(
+                        onPressed: () {
+                          login(_email.text.toString(),
+                              _password.text.toString(), context);
+                        },
+                        style: GradientElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(
+                                15), // ปรับความโค้งของเหลียม
+                          ),
+                          gradient: const LinearGradient(
+                            colors: [
+                              Color.fromARGB(255, 83, 205, 159),
+                              Color.fromARGB(255, 13, 122, 92),
+                            ],
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                          ),
                         ),
-                        gradient: const LinearGradient(
-                          colors: [
-                            Color.fromARGB(255, 83, 205, 159),
-                            Color.fromARGB(255, 13, 122, 92),
-                          ],
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                        ),
-                      ),
-                      child: const Text(
-                        "SIGN IN",
-                        style: TextStyle(
-                          fontFamily: 'Outfit',
-                          fontSize: 20,
-                          color: Color.fromARGB(255, 255, 255, 255),
+                        child: const Text(
+                          "SIGN IN",
+                          style: TextStyle(
+                            fontFamily: 'Outfit',
+                            fontSize: 20,
+                            color: Color.fromARGB(255, 255, 255, 255),
+                          ),
                         ),
                       ),
                     ),
                   ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  SizedBox(
-                    width: 339,
-                    height: 70,
-                    child: GradientElevatedButton(
-                      onPressed: () {
-                        Navigator.of(context).pushNamedAndRemoveUntil(
-                            singupRoutes, (routes) => false);
-                      },
-                      style: GradientElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(
-                              15), // ปรับความโค้งของเหลียม
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(43, 20, 43, 0),
+                    child: SizedBox(
+                      width: double.infinity,
+                      height: 70,
+                      child: GradientElevatedButton(
+                        onPressed: () {
+                          Navigator.of(context).pushNamedAndRemoveUntil(
+                              singupRoutes, (routes) => false);
+                        },
+                        style: GradientElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(
+                                15), // ปรับความโค้งของเหลียม
+                          ),
+                          gradient: const LinearGradient(
+                            colors: [
+                              Color.fromARGB(255, 13, 112, 92),
+                              Color.fromARGB(255, 0, 80, 62),
+                            ],
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                          ),
                         ),
-                        gradient: const LinearGradient(
-                          colors: [
-                            Color.fromARGB(255, 13, 112, 92),
-                            Color.fromARGB(255, 0, 80, 62),
-                          ],
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                        ),
-                      ),
-                      child: const Text(
-                        "SIGN UP",
-                        style: TextStyle(
-                          fontFamily: 'Outfit',
-                          fontSize: 20,
-                          color: Color.fromARGB(255, 255, 255, 255),
+                        child: const Text(
+                          "SIGN UP",
+                          style: TextStyle(
+                            fontFamily: 'Outfit',
+                            fontSize: 20,
+                            color: Color.fromARGB(255, 255, 255, 255),
+                          ),
                         ),
                       ),
                     ),
@@ -188,8 +195,8 @@ class _Login_pState extends State<Login_page> {
               ),
             ),
           ),
-        ),
-      ),
+        );
+      }),
     ));
   }
 

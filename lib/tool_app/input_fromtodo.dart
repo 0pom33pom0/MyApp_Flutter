@@ -40,7 +40,7 @@ class Input_fromTodo extends StatelessWidget {
                 fontWeight: FontWeight.w500,
                 color: HexColor("#666161"),
                 fontSize: 16),
-            border: InputBorder.none, // เอาเส้นขอบออก
+            border: InputBorder.none,
           ),
         ),
       ),
