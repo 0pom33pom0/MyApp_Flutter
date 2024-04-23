@@ -76,6 +76,8 @@ class _MyWidgetState extends State<ShowTodo> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(widget.title,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                           fontFamily: 'outfit',
                           color: HexColor("#0D7A5C"),
@@ -149,7 +151,7 @@ class _MyWidgetState extends State<ShowTodo> {
                   padding: const EdgeInsets.symmetric(horizontal: 46),
                   child: GestureDetector(
                     onTap: () {
-                      updetaTddo(widget);
+                      updateTodo(widget);
                     },
                     child: Container(
                       height: 45,
@@ -197,25 +199,20 @@ class _MyWidgetState extends State<ShowTodo> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 46),
                   child: GestureDetector(
-                    onTap: () async {
-                      final kk = await deleteTodo(widget, context);
-                      if (kk == true) {
-                        AwesomeDialog(
+                    onTap: () {
+                      AwesomeDialog(
                           context: context,
+                          dialogType: DialogType.warning,
                           animType: AnimType.bottomSlide,
-                          dialogType: DialogType.success,
-                          showCloseIcon: true,
-                          title: "Success",
-                          desc: "ลบสำเสร็จ",
-                          dismissOnTouchOutside: false,
-                          btnOkOnPress: () {
-                            Navigator.of(context).pushNamedAndRemoveUntil(
-                                todoRoutes, (routes) => false);
+                          headerAnimationLoop: true,
+                          title: 'Delete?',
+                          desc: 'Delete Your Todo?',
+                          btnCancelOnPress: () {
+                            Navigator.pop(context);
                           },
-                        ).show();
-                      } else {
-                        print("GG");
-                      }
+                          btnOkOnPress: () async {
+                            await deleteTodo(widget, context);
+                          }).show();
                     },
                     child: Container(
                       height: 45,
@@ -257,17 +254,32 @@ class _MyWidgetState extends State<ShowTodo> {
             ));
   }
 
-  Future<bool> deleteTodo(int id, context) async {
-    final re = await MyApi().DeleteTodo(id);
-    print(re.statusCode);
+  Future<void> deleteTodo(int id, context) async {
+    final re = await MyApi().DeleteTodo(id, context);
     if (re.statusCode == 200) {
-      return true;
+      AwesomeDialog(
+              context: context,
+              dialogType: DialogType.success,
+              animType: AnimType.bottomSlide,
+              title: 'success',
+              desc: 'Delete successful',
+              autoHide: const Duration(milliseconds: 2000))
+          .show()
+          .then((value) => Navigator.of(context)
+              .pushNamedAndRemoveUntil(todoRoutes, (routes) => false));
     } else {
-      return false;
+      AwesomeDialog(
+              context: context,
+              dialogType: DialogType.error,
+              animType: AnimType.bottomSlide,
+              title: 'unsuccessful',
+              desc: 'Delete unsuccessful',
+              autoHide: const Duration(milliseconds: 2500))
+          .show();
     }
   }
 
-  Future<void> updetaTddo(int id) async {
+  Future<void> updateTodo(int id) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setInt('todoid', id);
     await prefs.setString('title_todo', widget.title);

@@ -33,6 +33,9 @@ class Input_fromTodo extends StatelessWidget {
           textInputAction: textAction,
           maxLines: maxLines,
           controller: data,
+          onTapOutside: (event) {
+            FocusScope.of(context).unfocus();
+          },
           decoration: InputDecoration(
             hintText: title,
             hintStyle: TextStyle(

@@ -8,13 +8,15 @@ class Input_from extends StatefulWidget {
   final TextInputType type_text;
   final bool check;
   final TextInputAction textAction;
+  final FormFieldValidator<String> validator;
   Input_from(
       {super.key,
       required this.title,
       required this.data,
       required this.type_text,
       required this.check,
-      required this.textAction});
+      required this.textAction,
+      required this.validator});
 
   @override
   State<Input_from> createState() => _Input_fromState();
@@ -50,6 +52,10 @@ class _Input_fromState extends State<Input_from> {
               child: TextFormField(
                 textInputAction: widget.textAction,
                 controller: widget.data,
+                validator: widget.validator,
+                onTapOutside: (event) {
+                  FocusScope.of(context).unfocus();
+                },
                 obscureText: obscureText,
                 style: const TextStyle(
                   fontFamily: 'Outfit',
@@ -75,7 +81,7 @@ class _Input_fromState extends State<Input_from> {
                             });
                           },
                         )
-                      : null, // ปรับขนาดแนวราบและตั้งค่าความสูงของช่องใส่ข้อมูล
+                      : null,
                 ),
               ),
             ),

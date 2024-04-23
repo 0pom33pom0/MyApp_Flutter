@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gghup01/my_app/home_newtodo_page.dart';
-import 'package:flutter_gghup01/my_app/home_showtodo_page.dart';
+import 'package:flutter_gghup01/screen/newtodo_screen.dart';
+import 'package:flutter_gghup01/screen/showtodo_screen.dart';
 import 'package:flutter_gghup01/router/router.dart';
-import 'package:flutter_gghup01/screen/Login.dart';
-import 'package:flutter_gghup01/screen/sing_up.dart';
+import 'package:flutter_gghup01/screen/sing_in_screen.dart';
+import 'package:flutter_gghup01/screen/sing_up_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {

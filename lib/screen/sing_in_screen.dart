@@ -1,11 +1,13 @@
 // import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_gghup01/api_myapp/api_app.dart';
 // import 'package:flutter_gghup01/my_app/home_showtodo_page.dart';
 import 'package:flutter_gghup01/router/router.dart';
 // import 'package:flutter_gghup01/screen/sing_up.dart';
-import 'package:flutter_gghup01/tool_app/input_from.dart';
+import 'package:flutter_gghup01/tool_app/fromsing_tool.dart';
+import 'package:form_field_validator/form_field_validator.dart';
 import 'package:gradient_elevated_button/gradient_elevated_button.dart';
 // import 'package:http/http.dart' as http;
 
@@ -17,11 +19,11 @@ class Login_page extends StatefulWidget {
 }
 
 class _Login_pState extends State<Login_page> {
-  final formKey = GlobalKey<NavigatorState>();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late final TextEditingController _email;
   late final TextEditingController _password;
-  String? _emailError;
-  String? _passwordError;
+  // String? _emailError;
+  // String? _passwordError;
   @override
   void initState() {
     _email = TextEditingController();
@@ -60,7 +62,6 @@ class _Login_pState extends State<Login_page> {
               minHeight: contraints.maxHeight,
             ),
             child: IntrinsicHeight(
-              key: formKey,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
@@ -93,18 +94,41 @@ class _Login_pState extends State<Login_page> {
                     fit: BoxFit.cover, // ปรับขนาดของภาพให้พอดีกับขนาดที่กำหนด
                   ),
                   const SizedBox(height: 34),
-                  Input_from(
-                      title: "Email",
-                      data: _email,
-                      type_text: TextInputType.emailAddress,
-                      check: false,
-                      textAction: TextInputAction.next),
-                  Input_from(
-                      title: "Password",
-                      data: _password,
-                      type_text: TextInputType.visiblePassword,
-                      check: true,
-                      textAction: TextInputAction.done),
+                  Form(
+                    key: _formKey,
+                    child: Column(
+                      children: [
+                        Input_from(
+                          title: "Email",
+                          data: _email,
+                          type_text: TextInputType.emailAddress,
+                          check: false,
+                          textAction: TextInputAction.next,
+                          validator: MultiValidator([
+                            RequiredValidator(errorText: "Enter Your Email"),
+                            EmailValidator(
+                                errorText: "Enter Correct Email Address")
+                          ]).call,
+                        ),
+                        Input_from(
+                            title: "Password",
+                            data: _password,
+                            type_text: TextInputType.visiblePassword,
+                            check: true,
+                            textAction: TextInputAction.done,
+                            validator: MultiValidator([
+                              RequiredValidator(
+                                  errorText: 'password is required'),
+                              // MinLengthValidator(8,
+                              //     errorText:
+                              //         'password must be at least 8 digits long'),
+                              // PatternValidator(r'(?=.*?[#?!@$%^&*-])',
+                              //     errorText:
+                              //         'passwords must have at least one special character')
+                            ]).call)
+                      ],
+                    ),
+                  ),
                   const Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
@@ -128,8 +152,12 @@ class _Login_pState extends State<Login_page> {
                       height: 70,
                       child: GradientElevatedButton(
                         onPressed: () {
-                          login(_email.text.toString(),
-                              _password.text.toString(), context);
+                          if (_formKey.currentState!.validate()) {
+                            // ถ้าข้อมูลผ่านการตรวจสอบ validator
+                            // คุณสามารถดำเนินการต่อไปตามต้องการได้ที่นี่
+                            login(_email.text.toString(),
+                                _password.text.toString(), context);
+                          }
                         },
                         style: GradientElevatedButton.styleFrom(
                           shape: RoundedRectangleBorder(
