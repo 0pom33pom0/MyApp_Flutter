@@ -1,15 +1,10 @@
-// import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_gghup01/api_myapp/api_app.dart';
-// import 'package:flutter_gghup01/my_app/home_showtodo_page.dart';
 import 'package:flutter_gghup01/router/router.dart';
-// import 'package:flutter_gghup01/screen/sing_up.dart';
 import 'package:flutter_gghup01/tool_app/fromsing_tool.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:gradient_elevated_button/gradient_elevated_button.dart';
-// import 'package:http/http.dart' as http;
 
 class Login_page extends StatefulWidget {
   const Login_page({super.key});
@@ -22,8 +17,7 @@ class _Login_pState extends State<Login_page> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late final TextEditingController _email;
   late final TextEditingController _password;
-  // String? _emailError;
-  // String? _passwordError;
+
   @override
   void initState() {
     _email = TextEditingController();
@@ -36,12 +30,6 @@ class _Login_pState extends State<Login_page> {
     _email.dispose();
     _password.dispose();
     super.dispose();
-  }
-
-  void _showSuackBar(String message) {
-    final snackBar =
-        SnackBar(content: Text(message), duration: const Duration(seconds: 2));
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
   @override
@@ -102,7 +90,7 @@ class _Login_pState extends State<Login_page> {
                           title: "Email",
                           data: _email,
                           type_text: TextInputType.emailAddress,
-                          check: false,
+                          checkpass: false,
                           textAction: TextInputAction.next,
                           validator: MultiValidator([
                             RequiredValidator(errorText: "Enter Your Email"),
@@ -114,7 +102,7 @@ class _Login_pState extends State<Login_page> {
                             title: "Password",
                             data: _password,
                             type_text: TextInputType.visiblePassword,
-                            check: true,
+                            checkpass: true,
                             textAction: TextInputAction.done,
                             validator: MultiValidator([
                               RequiredValidator(
@@ -122,9 +110,6 @@ class _Login_pState extends State<Login_page> {
                               // MinLengthValidator(8,
                               //     errorText:
                               //         'password must be at least 8 digits long'),
-                              // PatternValidator(r'(?=.*?[#?!@$%^&*-])',
-                              //     errorText:
-                              //         'passwords must have at least one special character')
                             ]).call)
                       ],
                     ),

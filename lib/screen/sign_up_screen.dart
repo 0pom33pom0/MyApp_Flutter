@@ -132,7 +132,7 @@ class _Singup_pageState extends State<Singup_page> {
                               title: "First name",
                               data: _firstName,
                               type_text: TextInputType.name,
-                              check: false,
+                              checkpass: false,
                               textAction: TextInputAction.next,
                               validator: MultiValidator([
                                 RequiredValidator(
@@ -144,7 +144,7 @@ class _Singup_pageState extends State<Singup_page> {
                               title: "Last name",
                               data: _lastName,
                               type_text: TextInputType.name,
-                              check: false,
+                              checkpass: false,
                               textAction: TextInputAction.next,
                               validator: MultiValidator([
                                 RequiredValidator(
@@ -156,7 +156,7 @@ class _Singup_pageState extends State<Singup_page> {
                               title: "Email",
                               data: _email,
                               type_text: TextInputType.emailAddress,
-                              check: false,
+                              checkpass: false,
                               textAction: TextInputAction.next,
                               validator: MultiValidator([
                                 RequiredValidator(
@@ -168,7 +168,7 @@ class _Singup_pageState extends State<Singup_page> {
                               title: "Password",
                               data: _password,
                               type_text: TextInputType.visiblePassword,
-                              check: true,
+                              checkpass: true,
                               textAction: TextInputAction.done,
                               validator: MultiValidator([
                                 RequiredValidator(

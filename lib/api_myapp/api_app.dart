@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_gghup01/model/todo_model.dart';
 import 'package:flutter_gghup01/router/router.dart';
 import 'package:http/http.dart' as http;
@@ -12,7 +13,7 @@ class MyApi {
   String Url = 'http://192.168.26.16:6004';
   final header = {
     'Content-Type': 'application/json',
-    'Authorization': 'Bearer 950b88051dc87fe3fcb0b4df25eee676'
+    'Authorization': 'Bearer 950b88051dc87fe3fcb0b4df25eee676' //ออเทอเซชัน
   };
 
   Future<void> login(String email, password, BuildContext context) async {
@@ -21,7 +22,7 @@ class MyApi {
     try {
       final response = await http.post(Api, headers: header, body: body);
       if (response.statusCode == 200) {
-        var data = jsonDecode(response.body.toString());
+        var data = jsonDecode(response.body);
         final SharedPreferences prefs = await SharedPreferences.getInstance();
 
         await prefs.setBool('login_check', true);
@@ -32,31 +33,41 @@ class MyApi {
 
         AwesomeDialog(
                 context: context,
+                width: 360,
                 dialogType: DialogType.success,
                 animType: AnimType.bottomSlide,
                 title: 'success',
+                titleTextStyle: const TextStyle(fontFamily: 'Outfit'),
                 desc: 'Login successful',
+                descTextStyle: const TextStyle(fontFamily: 'Outfit'),
                 autoHide: const Duration(milliseconds: 2000))
             .show()
             .then((value) => Navigator.of(context)
                 .pushNamedAndRemoveUntil(todoRoutes, (routes) => false));
       } else {
+        final errorcheck = jsonDecode(response.body);
         AwesomeDialog(
                 context: context,
+                width: 360,
                 dialogType: DialogType.error,
                 animType: AnimType.bottomSlide,
                 title: 'unsuccessful',
-                desc: 'Please check your email and password.',
+                titleTextStyle: const TextStyle(fontFamily: 'Outfit'),
+                desc: errorcheck['message'],
+                descTextStyle: const TextStyle(fontFamily: 'Outfit'),
                 autoHide: const Duration(milliseconds: 2500))
             .show();
       }
     } catch (e) {
       AwesomeDialog(
               context: context,
+              width: 360,
               dialogType: DialogType.warning,
               animType: AnimType.bottomSlide,
               title: 'Internet',
-              desc: 'Internet Not Connect',
+              titleTextStyle: const TextStyle(fontFamily: 'Outfit'),
+              desc: 'No internet connection.',
+              descTextStyle: const TextStyle(fontFamily: 'Outfit'),
               autoHide: const Duration(milliseconds: 2500))
           .show();
     }
@@ -75,10 +86,13 @@ class MyApi {
       if (response.statusCode == 200) {
         AwesomeDialog(
                 context: context,
+                width: 360,
                 dialogType: DialogType.success,
                 animType: AnimType.bottomSlide,
                 title: 'success',
+                titleTextStyle: const TextStyle(fontFamily: 'Outfit'),
                 desc: 'Login successful',
+                descTextStyle: const TextStyle(fontFamily: 'Outfit'),
                 autoHide: const Duration(milliseconds: 2000))
             .show()
             .then((value) => Navigator.of(context)
@@ -86,20 +100,26 @@ class MyApi {
       } else {
         AwesomeDialog(
                 context: context,
+                width: 360,
                 dialogType: DialogType.error,
                 animType: AnimType.bottomSlide,
                 title: 'unsuccessful',
+                titleTextStyle: const TextStyle(fontFamily: 'Outfit'),
                 desc: 'This Email is Already in Use.',
+                descTextStyle: const TextStyle(fontFamily: 'Outfit'),
                 autoHide: const Duration(milliseconds: 2500))
             .show();
       }
     } catch (e) {
       AwesomeDialog(
               context: context,
+              width: 360,
               dialogType: DialogType.warning,
               animType: AnimType.bottomSlide,
               title: 'Internet',
+              titleTextStyle: const TextStyle(fontFamily: 'Outfit'),
               desc: 'Internet Not Connect',
+              descTextStyle: const TextStyle(fontFamily: 'Outfit'),
               autoHide: const Duration(milliseconds: 2500))
           .show();
     }
@@ -111,10 +131,13 @@ class MyApi {
     await prefs.setBool('login_check', false);
     AwesomeDialog(
             context: context,
+            width: 360,
             dialogType: DialogType.success,
             animType: AnimType.bottomSlide,
             title: 'success',
+            titleTextStyle: const TextStyle(fontFamily: 'Outfit'),
             desc: 'Logout successful',
+            descTextStyle: const TextStyle(fontFamily: 'Outfit'),
             autoHide: const Duration(milliseconds: 2000))
         .show()
         .then((value) => Navigator.of(context)
@@ -146,10 +169,13 @@ class MyApi {
     } catch (e) {
       AwesomeDialog(
               context: context,
+              width: 360,
               dialogType: DialogType.warning,
               animType: AnimType.bottomSlide,
               title: 'Internet',
+              titleTextStyle: const TextStyle(fontFamily: 'Outfit'),
               desc: 'Internet Not Connect',
+              descTextStyle: const TextStyle(fontFamily: 'Outfit'),
               autoHide: const Duration(milliseconds: 3000))
           .show();
       throw Exception('Failed to fetch articles');
@@ -170,10 +196,13 @@ class MyApi {
       if (response.statusCode == 200) {
         AwesomeDialog(
                 context: context,
+                width: 360,
                 dialogType: DialogType.success,
                 animType: AnimType.bottomSlide,
                 title: 'success',
+                titleTextStyle: const TextStyle(fontFamily: 'Outfit'),
                 desc: 'Save successful',
+                descTextStyle: const TextStyle(fontFamily: 'Outfit'),
                 autoHide: const Duration(milliseconds: 2000))
             .show()
             .then((value) => Navigator.of(context)
@@ -181,26 +210,33 @@ class MyApi {
       } else {
         AwesomeDialog(
                 context: context,
+                width: 360,
                 dialogType: DialogType.error,
                 animType: AnimType.bottomSlide,
                 title: 'Unsuccessful',
+                titleTextStyle: const TextStyle(fontFamily: 'Outfit'),
                 desc: 'Save Unsuccessful',
+                descTextStyle: const TextStyle(fontFamily: 'Outfit'),
                 autoHide: const Duration(milliseconds: 2500))
             .show();
       }
     } catch (e) {
       AwesomeDialog(
               context: context,
+              width: 360,
               dialogType: DialogType.warning,
               animType: AnimType.bottomSlide,
               title: 'Internet',
+              titleTextStyle: const TextStyle(fontFamily: 'Outfit'),
               desc: 'Internet Not Connect',
+              descTextStyle: const TextStyle(fontFamily: 'Outfit'),
               autoHide: const Duration(milliseconds: 2500))
           .show();
     }
   }
 
-  Future<void> EditTodo(title, desc, completed, userId, todoid, context) async {
+  Future<void> EditTodo(
+      title, desc, completed, userId, todoid, checkbox, context) async {
     final Api = Uri.parse('$Url/api/update_todo');
     final body = jsonEncode({
       "user_todo_list_id": todoid,
@@ -213,33 +249,46 @@ class MyApi {
     try {
       final response = await http.post(Api, headers: header, body: body);
       if (response.statusCode == 200) {
-        AwesomeDialog(
-                context: context,
-                dialogType: DialogType.success,
-                animType: AnimType.bottomSlide,
-                title: 'success',
-                desc: 'Save successful',
-                autoHide: const Duration(milliseconds: 2000))
-            .show()
-            .then((value) => Navigator.of(context)
-                .pushNamedAndRemoveUntil(todoRoutes, (routes) => false));
+        if (checkbox != true) {
+          AwesomeDialog(
+                  context: context,
+                  width: 360,
+                  dialogType: DialogType.success,
+                  animType: AnimType.bottomSlide,
+                  title: 'success',
+                  titleTextStyle: const TextStyle(fontFamily: 'Outfit'),
+                  desc: 'Save successful',
+                  descTextStyle: const TextStyle(fontFamily: 'Outfit'),
+                  autoHide: const Duration(milliseconds: 2000))
+              .show()
+              .then((value) => Navigator.of(context)
+                  .pushNamedAndRemoveUntil(todoRoutes, (routes) => false));
+        } else {
+          null;
+        }
       } else {
         AwesomeDialog(
                 context: context,
+                width: 360,
                 dialogType: DialogType.error,
                 animType: AnimType.bottomSlide,
                 title: 'Unsuccessful',
+                titleTextStyle: const TextStyle(fontFamily: 'Outfit'),
                 desc: 'Save Unsuccessful',
+                descTextStyle: const TextStyle(fontFamily: 'Outfit'),
                 autoHide: const Duration(milliseconds: 2500))
             .show();
       }
     } catch (e) {
       AwesomeDialog(
               context: context,
+              width: 360,
               dialogType: DialogType.warning,
               animType: AnimType.bottomSlide,
               title: 'Internet',
+              titleTextStyle: const TextStyle(fontFamily: 'Outfit'),
               desc: 'Internet Not Connect',
+              descTextStyle: const TextStyle(fontFamily: 'Outfit'),
               autoHide: const Duration(milliseconds: 2500))
           .show();
     }
@@ -253,10 +302,13 @@ class MyApi {
     } catch (e) {
       AwesomeDialog(
               context: context,
+              width: 360,
               dialogType: DialogType.warning,
               animType: AnimType.bottomSlide,
               title: 'Internet',
+              titleTextStyle: const TextStyle(fontFamily: 'Outfit'),
               desc: 'Internet Not Connect',
+              descTextStyle: const TextStyle(fontFamily: 'Outfit'),
               autoHide: const Duration(milliseconds: 2500))
           .show();
       throw Exception('Error deleting todo');

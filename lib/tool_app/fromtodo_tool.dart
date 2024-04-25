@@ -6,13 +6,14 @@ class Input_fromTodo extends StatelessWidget {
   final int maxLines;
   final TextEditingController data;
   final TextInputAction textAction;
-  Input_fromTodo({
-    super.key,
-    required this.title,
-    required this.data,
-    required this.maxLines,
-    required this.textAction,
-  });
+  final FormFieldValidator<String> validator;
+  Input_fromTodo(
+      {super.key,
+      required this.title,
+      required this.data,
+      required this.maxLines,
+      required this.textAction,
+      required this.validator});
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +34,7 @@ class Input_fromTodo extends StatelessWidget {
           textInputAction: textAction,
           maxLines: maxLines,
           controller: data,
+          validator: validator,
           onTapOutside: (event) {
             FocusScope.of(context).unfocus();
           },

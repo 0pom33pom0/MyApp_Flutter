@@ -4,10 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gghup01/api_myapp/api_app.dart';
 import 'package:flutter_gghup01/router/router.dart';
-// import 'package:flutter_gghup01/router/router.dart';
+import 'package:flutter_gghup01/screen/todo_screen/newtodo_screen.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:flutter/widgets.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 // ignore: must_be_immutable
 class ShowTodo extends StatefulWidget {
@@ -15,15 +14,16 @@ class ShowTodo extends StatefulWidget {
   final String content;
   final String date;
   late bool isCompleted;
-  final int id;
-  ShowTodo({
-    super.key,
-    required this.title,
-    required this.content,
-    required this.date,
-    required this.isCompleted,
-    required this.id,
-  });
+  final int todoId;
+  final int userId;
+  ShowTodo(
+      {super.key,
+      required this.title,
+      required this.content,
+      required this.date,
+      required this.isCompleted,
+      required this.todoId,
+      required this.userId});
 
   @override
   State<ShowTodo> createState() => _MyWidgetState();
@@ -61,6 +61,13 @@ class _MyWidgetState extends State<ShowTodo> {
                   onChanged: (bool? value) {
                     setState(() {
                       widget.isCompleted = value ?? false;
+                      chackboxupdate(
+                          widget.title,
+                          widget.content,
+                          widget.isCompleted,
+                          widget.userId,
+                          widget.todoId,
+                          context);
                     });
                   },
                   shape: const CircleBorder(),
@@ -108,7 +115,7 @@ class _MyWidgetState extends State<ShowTodo> {
                   icon: Icon(Icons.more_horiz,
                       color: HexColor("#666161").withOpacity(0.68)),
                   onPressed: () {
-                    _displayBottomSheet(context, widget.id);
+                    _displayBottomSheet(context, widget, widget.todoId);
                   },
                 ),
               ),
@@ -119,7 +126,7 @@ class _MyWidgetState extends State<ShowTodo> {
     );
   }
 
-  Future _displayBottomSheet(BuildContext context, int widget) async {
+  Future<void> _displayBottomSheet(BuildContext context, widget, todoId) async {
     return showModalBottomSheet(
         context: context,
         shape: const RoundedRectangleBorder(
@@ -202,16 +209,19 @@ class _MyWidgetState extends State<ShowTodo> {
                     onTap: () {
                       AwesomeDialog(
                           context: context,
+                          width: 360,
                           dialogType: DialogType.warning,
                           animType: AnimType.bottomSlide,
                           headerAnimationLoop: true,
                           title: 'Delete?',
+                          titleTextStyle: const TextStyle(fontFamily: 'Outfit'),
                           desc: 'Delete Your Todo?',
+                          descTextStyle: const TextStyle(fontFamily: 'Outfit'),
                           btnCancelOnPress: () {
                             Navigator.pop(context);
                           },
                           btnOkOnPress: () async {
-                            await deleteTodo(widget, context);
+                            await deleteTodo(todoId, context);
                           }).show();
                     },
                     child: Container(
@@ -259,33 +269,44 @@ class _MyWidgetState extends State<ShowTodo> {
     if (re.statusCode == 200) {
       AwesomeDialog(
               context: context,
+              width: 360,
               dialogType: DialogType.success,
               animType: AnimType.bottomSlide,
               title: 'success',
+              titleTextStyle: const TextStyle(fontFamily: 'Outfit'),
               desc: 'Delete successful',
+              descTextStyle: const TextStyle(fontFamily: 'Outfit'),
               autoHide: const Duration(milliseconds: 2000))
           .show()
           .then((value) => Navigator.of(context)
               .pushNamedAndRemoveUntil(todoRoutes, (routes) => false));
     } else {
       AwesomeDialog(
+              width: 360,
               context: context,
               dialogType: DialogType.error,
               animType: AnimType.bottomSlide,
               title: 'unsuccessful',
+              titleTextStyle: const TextStyle(fontFamily: 'Outfit'),
               desc: 'Delete unsuccessful',
+              descTextStyle: const TextStyle(fontFamily: 'Outfit'),
               autoHide: const Duration(milliseconds: 2500))
           .show();
     }
   }
 
-  Future<void> updateTodo(int id) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setInt('todoid', id);
-    await prefs.setString('title_todo', widget.title);
-    await prefs.setString('desc_todo', widget.content);
-    await prefs.setBool('completed_todo', widget.isCompleted);
-    Navigator.of(context)
-        .pushNamedAndRemoveUntil(newTodoRoutes, (routes) => false);
+  Future<void> updateTodo(widget) async {
+    Navigator.pop(context);
+    Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => home_newTodo(todo: widget),
+        ));
+  }
+
+  Future<void> chackboxupdate(
+      title, desc, completed, userId, todoid, context) async {
+    await MyApi()
+        .EditTodo(title, desc, completed, userId, todoid, true, context);
   }
 }

@@ -6,7 +6,7 @@ class Input_from extends StatefulWidget {
   final String title;
   final TextEditingController data;
   final TextInputType type_text;
-  final bool check;
+  final bool checkpass;
   final TextInputAction textAction;
   final FormFieldValidator<String> validator;
   Input_from(
@@ -14,7 +14,7 @@ class Input_from extends StatefulWidget {
       required this.title,
       required this.data,
       required this.type_text,
-      required this.check,
+      required this.checkpass,
       required this.textAction,
       required this.validator});
 
@@ -28,7 +28,7 @@ class _Input_fromState extends State<Input_from> {
   @override
   void initState() {
     super.initState();
-    obscureText = widget.check;
+    obscureText = widget.checkpass;
   }
 
   @override
@@ -66,7 +66,7 @@ class _Input_fromState extends State<Input_from> {
                   border: InputBorder.none, // เอาเส้นขอบออก
                   contentPadding:
                       const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-                  suffixIcon: widget.check
+                  suffixIcon: widget.checkpass
                       ? IconButton(
                           icon: Icon(
                             obscureText
