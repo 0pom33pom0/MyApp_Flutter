@@ -98,6 +98,7 @@ class MyApi {
             .then((value) => Navigator.of(context)
                 .pushNamedAndRemoveUntil(loginRoutes, (routes) => false));
       } else {
+        final errorcheck = jsonDecode(response.body);
         AwesomeDialog(
                 context: context,
                 width: 360,
@@ -105,7 +106,7 @@ class MyApi {
                 animType: AnimType.bottomSlide,
                 title: 'unsuccessful',
                 titleTextStyle: const TextStyle(fontFamily: 'Outfit'),
-                desc: 'This Email is Already in Use.',
+                desc: errorcheck['message'],
                 descTextStyle: const TextStyle(fontFamily: 'Outfit'),
                 autoHide: const Duration(milliseconds: 2500))
             .show();
@@ -194,19 +195,33 @@ class MyApi {
     try {
       final response = await http.post(Api, headers: header, body: body);
       if (response.statusCode == 200) {
-        AwesomeDialog(
-                context: context,
-                width: 360,
-                dialogType: DialogType.success,
-                animType: AnimType.bottomSlide,
-                title: 'success',
-                titleTextStyle: const TextStyle(fontFamily: 'Outfit'),
-                desc: 'Save successful',
-                descTextStyle: const TextStyle(fontFamily: 'Outfit'),
-                autoHide: const Duration(milliseconds: 2000))
-            .show()
-            .then((value) => Navigator.of(context)
-                .pushNamedAndRemoveUntil(todoRoutes, (routes) => false));
+        if (response.body != "OK") {
+          AwesomeDialog(
+                  context: context,
+                  width: 360,
+                  dialogType: DialogType.error,
+                  animType: AnimType.bottomSlide,
+                  title: 'Unsuccessful',
+                  titleTextStyle: const TextStyle(fontFamily: 'Outfit'),
+                  desc: jsonDecode(response.body)["sqlMessage"].toString(),
+                  descTextStyle: const TextStyle(fontFamily: 'Outfit'),
+                  autoHide: const Duration(milliseconds: 2500))
+              .show();
+        } else {
+          AwesomeDialog(
+                  context: context,
+                  width: 360,
+                  dialogType: DialogType.success,
+                  animType: AnimType.bottomSlide,
+                  title: 'success',
+                  titleTextStyle: const TextStyle(fontFamily: 'Outfit'),
+                  desc: 'Save successful',
+                  descTextStyle: const TextStyle(fontFamily: 'Outfit'),
+                  autoHide: const Duration(milliseconds: 2000))
+              .show()
+              .then((value) => Navigator.of(context)
+                  .pushNamedAndRemoveUntil(todoRoutes, (routes) => false));
+        }
       } else {
         AwesomeDialog(
                 context: context,
@@ -215,7 +230,7 @@ class MyApi {
                 animType: AnimType.bottomSlide,
                 title: 'Unsuccessful',
                 titleTextStyle: const TextStyle(fontFamily: 'Outfit'),
-                desc: 'Save Unsuccessful',
+                desc: jsonDecode(response.body)["message"],
                 descTextStyle: const TextStyle(fontFamily: 'Outfit'),
                 autoHide: const Duration(milliseconds: 2500))
             .show();
@@ -228,7 +243,7 @@ class MyApi {
               animType: AnimType.bottomSlide,
               title: 'Internet',
               titleTextStyle: const TextStyle(fontFamily: 'Outfit'),
-              desc: 'Internet Not Connect',
+              desc: e.toString(),
               descTextStyle: const TextStyle(fontFamily: 'Outfit'),
               autoHide: const Duration(milliseconds: 2500))
           .show();

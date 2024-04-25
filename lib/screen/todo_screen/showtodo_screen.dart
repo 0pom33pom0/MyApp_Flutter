@@ -26,8 +26,8 @@ class _MyWidgetState extends State<home_showtodo> {
   late final TextEditingController _search;
   late Future<List<Todo>> todos = Future.value([]);
   late Future<List<Todo>> searchTodos = Future.value([]);
-  String? FindFirstname;
-  String? FindLastname;
+  String? FindFirstname = " ";
+  String? FindLastname = " ";
   String? isCompleted;
   int? FindUserId;
   String? formattedDate;
